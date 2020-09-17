@@ -17,7 +17,7 @@ import java.util.Map;
  * @since 17.09.2020
  */
 @Service
-public class CallDetailRecordStatisticsCalculator {
+public class CallDetailRecordAverageCalculator {
 
     private static final int SCALE_VALUE = 10;
 

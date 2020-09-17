@@ -31,10 +31,10 @@ public class CallDetailRecordService {
     private final CallDetailRecordCSVParser callDetailRecordCSVParser;
     private final CallDetailRecordRepository callDetailRecordRepository;
 
-    public CallDetailRecordService(CallDetailRecordCSVParser callDetailRecordCSVParser, CallDetailRecordRepository callDetailRecordRepository, CallDetailRecordStatisticsCalculator callDetailRecordStatisticsCalculator) {
+    public CallDetailRecordService(CallDetailRecordCSVParser callDetailRecordCSVParser, CallDetailRecordRepository callDetailRecordRepository, CallDetailRecordAverageCalculator callDetailRecordAverageCalculator) {
         this.callDetailRecordCSVParser = callDetailRecordCSVParser;
         this.callDetailRecordRepository = callDetailRecordRepository;
-        this.callDetailRecordStatisticsCalculator = callDetailRecordStatisticsCalculator;
+        this.callDetailRecordAverageCalculator = callDetailRecordAverageCalculator;
     }
 
     /**
@@ -74,7 +74,7 @@ public class CallDetailRecordService {
         callDetailRecordRepository.saveAll(callDetailRecords);
     }
 
-    private final CallDetailRecordStatisticsCalculator callDetailRecordStatisticsCalculator;
+    private final CallDetailRecordAverageCalculator callDetailRecordAverageCalculator;
 
     @Transactional
     public AverageCallsDetailsInfo getAverage(AverageCallsDetailsRequest averageCallsDetailsRequest) {
@@ -88,7 +88,7 @@ public class CallDetailRecordService {
                 Pageable.unpaged()
         );
 
-        return callDetailRecordStatisticsCalculator.calculateAverage(allForAverage);
+        return callDetailRecordAverageCalculator.calculateAverage(allForAverage);
     }
 
     @Transactional
