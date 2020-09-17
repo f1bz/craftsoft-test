@@ -28,6 +28,8 @@ public class CallsDetailsRequest {
 
     private List<String> statuses;
 
+    private String sortBy = "uuid";
+
     @Min(0)
     private Integer callDurationInSeconds;
 

@@ -10,6 +10,7 @@ import com.craftsoft.test.cdr.core.repository.CallDetailRecordRepository;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -102,7 +103,10 @@ public class CallDetailRecordService {
                 callsDetailsRequest.getCallDurationInSeconds()
         );
         final Long page = callsDetailsRequest.getPage();
-        PageRequest pageRequest = PageRequest.of(page.intValue() - 1, callsDetailsRequest.getResultsPerPage().intValue());
+        PageRequest pageRequest = PageRequest.of(
+                page.intValue() - 1,
+                callsDetailsRequest.getResultsPerPage().intValue(),
+                Sort.by(callsDetailsRequest.getSortBy()));
         final long totalPages = totalRecords / callsDetailsRequest.getResultsPerPage() + (totalRecords % callsDetailsRequest.getResultsPerPage() == 0 ? 0 : 1);
         final List<CallDetailRecord> records = callDetailRecordRepository.findAllWithParams(
                 callsDetailsRequest.getAccounts(),
