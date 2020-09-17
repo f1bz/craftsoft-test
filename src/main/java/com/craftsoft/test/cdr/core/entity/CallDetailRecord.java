@@ -74,6 +74,9 @@ public class CallDetailRecord {
      * Recalculates total cost and duration when changing start or end datetime or cost per minute.
      */
     private void recalculateTotalCostAndDuration() {
+        if (getStartDatetime() == null || getEndDatetime() == null || getCostPerMinute() == null) {
+            return;
+        }
         long duration = Duration.between(getStartDatetime().toInstant(), getEndDatetime().toInstant()).toMillis();
         long seconds = duration / 1000;
         BigDecimal milliseconds = BigDecimal.valueOf((duration - (seconds * 1000)) / 1000d);
