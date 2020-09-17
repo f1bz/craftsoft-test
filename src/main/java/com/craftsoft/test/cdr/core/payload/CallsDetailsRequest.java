@@ -3,6 +3,7 @@ package com.craftsoft.test.cdr.core.payload;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
+import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -28,7 +29,9 @@ public class CallsDetailsRequest {
 
     private List<String> statuses;
 
-    private String sortBy = "uuid";
+    private String sortBy = "id";
+
+    private Sort.Direction sortDirection = Sort.Direction.ASC;
 
     @Min(0)
     private Integer callDurationInSeconds;

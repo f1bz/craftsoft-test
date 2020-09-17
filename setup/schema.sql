@@ -6,7 +6,9 @@ create table call_detail_records
     start_datetime timestamp not null,
     end_datetime timestamp not null,
     status varchar(20) not null,
-    cost_per_minute numeric not null
+    cost_per_minute numeric not null,
+    total_duration numeric not null,
+    total_cost numeric not null
 );
 
 comment on table call_detail_records is 'This is a main table containing all info about call records ';

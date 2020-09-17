@@ -59,11 +59,13 @@ public class CallDetailRecord {
     @Column(name = "cost_per_minute")
     private BigDecimal costPerMinute;
 
-    @Transient
-    private BigDecimal totalCallCost;
+    @NotNull
+    @Column(name = "total_cost")
+    private BigDecimal totalCost;
 
-    @Transient
-    private BigDecimal totalCallDuration;
+    @NotNull
+    @Column(name = "total_duration")
+    private BigDecimal totalDuration;
 
     @PostLoad
     private void postLoad() {
@@ -80,8 +82,8 @@ public class CallDetailRecord {
         long duration = Duration.between(getStartDatetime().toInstant(), getEndDatetime().toInstant()).toMillis();
         long seconds = duration / 1000;
         BigDecimal milliseconds = BigDecimal.valueOf((duration - (seconds * 1000)) / 1000d);
-        totalCallDuration = BigDecimal.valueOf(seconds).add(milliseconds);
-        totalCallCost = costPerMinute.multiply(totalCallDuration);
+        totalDuration = BigDecimal.valueOf(seconds).add(milliseconds);
+        totalCost = costPerMinute.multiply(totalDuration);
     }
 
     public void setStartDatetime(Date startDatetime) {

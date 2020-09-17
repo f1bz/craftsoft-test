@@ -106,7 +106,7 @@ public class CallDetailRecordService {
         PageRequest pageRequest = PageRequest.of(
                 page.intValue() - 1,
                 callsDetailsRequest.getResultsPerPage().intValue(),
-                Sort.by(callsDetailsRequest.getSortBy()));
+                Sort.by(callsDetailsRequest.getSortDirection(), callsDetailsRequest.getSortBy()));
         final long totalPages = totalRecords / callsDetailsRequest.getResultsPerPage() + (totalRecords % callsDetailsRequest.getResultsPerPage() == 0 ? 0 : 1);
         final List<CallDetailRecord> records = callDetailRecordRepository.findAllWithParams(
                 callsDetailsRequest.getAccounts(),

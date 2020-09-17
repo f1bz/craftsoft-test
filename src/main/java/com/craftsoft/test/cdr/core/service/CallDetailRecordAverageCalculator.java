@@ -38,8 +38,8 @@ public class CallDetailRecordAverageCalculator {
         for (CallDetailRecord callDetailRecord : callDetailRecords) {
             callsByAccount.merge(callDetailRecord.getAccount(), 1, Integer::sum);
             averageCostPerMinute = averageCostPerMinute.add(callDetailRecord.getCostPerMinute());
-            averageDuration = averageDuration.add(callDetailRecord.getTotalCallDuration());
-            averageTotalCallCost = averageTotalCallCost.add(callDetailRecord.getTotalCallCost());
+            averageDuration = averageDuration.add(callDetailRecord.getTotalDuration());
+            averageTotalCallCost = averageTotalCallCost.add(callDetailRecord.getTotalCost());
         }
 
         if (!totalCalls.equals(BigDecimal.ZERO)) {

@@ -2,10 +2,9 @@ package com.craftsoft.test.cdr.core.service;
 
 import com.craftsoft.test.cdr.core.entity.CallDetailRecord;
 import com.craftsoft.test.cdr.core.exception.CdrApiException;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Call detail record validator.
