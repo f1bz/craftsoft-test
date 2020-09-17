@@ -21,6 +21,12 @@ public class CallDetailRecordAverageCalculator {
 
     private static final int SCALE_VALUE = 10;
 
+    /**
+     * Calculate average statistics values calls basing on list of call details records.
+     *
+     * @param callDetailRecords the call detail records
+     * @return the average calls details info
+     */
     public AverageCallsDetailsInfo calculateAverage(List<CallDetailRecord> callDetailRecords) {
         BigDecimal averageCostPerMinute = BigDecimal.ZERO;
         BigDecimal averageDuration = BigDecimal.ZERO;
