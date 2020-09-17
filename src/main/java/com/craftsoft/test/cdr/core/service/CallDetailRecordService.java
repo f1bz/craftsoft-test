@@ -1,15 +1,21 @@
 package com.craftsoft.test.cdr.core.service;
 
+import com.craftsoft.test.cdr.core.dto.AverageCallsDetailsInfo;
+import com.craftsoft.test.cdr.core.dto.CallsDetailsDTO;
 import com.craftsoft.test.cdr.core.entity.CallDetailRecord;
-import com.craftsoft.test.cdr.core.entity.CallDetailRecordView;
 import com.craftsoft.test.cdr.core.exception.CdrApiException;
+import com.craftsoft.test.cdr.core.payload.AverageCallsDetailsRequest;
+import com.craftsoft.test.cdr.core.payload.CallsDetailsRequest;
 import com.craftsoft.test.cdr.core.repository.CallDetailRecordRepository;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,9 +31,10 @@ public class CallDetailRecordService {
     private final CallDetailRecordCSVParser callDetailRecordCSVParser;
     private final CallDetailRecordRepository callDetailRecordRepository;
 
-    public CallDetailRecordService(CallDetailRecordCSVParser callDetailRecordCSVParser, CallDetailRecordRepository callDetailRecordRepository) {
+    public CallDetailRecordService(CallDetailRecordCSVParser callDetailRecordCSVParser, CallDetailRecordRepository callDetailRecordRepository, CallDetailRecordStatisticsCalculator callDetailRecordStatisticsCalculator) {
         this.callDetailRecordCSVParser = callDetailRecordCSVParser;
         this.callDetailRecordRepository = callDetailRecordRepository;
+        this.callDetailRecordStatisticsCalculator = callDetailRecordStatisticsCalculator;
     }
 
     /**
@@ -66,5 +73,53 @@ public class CallDetailRecordService {
     private void storeRecords(List<CallDetailRecord> callDetailRecords) {
         callDetailRecordRepository.saveAll(callDetailRecords);
     }
+
+    private final CallDetailRecordStatisticsCalculator callDetailRecordStatisticsCalculator;
+
+    @Transactional
+    public AverageCallsDetailsInfo getAverage(AverageCallsDetailsRequest averageCallsDetailsRequest) {
+        final List<CallDetailRecord> allForAverage = callDetailRecordRepository.findAllWithParams(
+                averageCallsDetailsRequest.getAccounts(),
+                averageCallsDetailsRequest.getDestinations(),
+                averageCallsDetailsRequest.getStatuses(),
+                averageCallsDetailsRequest.getStartDatetime(),
+                averageCallsDetailsRequest.getEndDatetime(),
+                null,
+                Pageable.unpaged()
+        );
+
+        return callDetailRecordStatisticsCalculator.calculateAverage(allForAverage);
+    }
+
+    @Transactional
+    public CallsDetailsDTO getAllCallDetailRecords(CallsDetailsRequest callsDetailsRequest) {
+        final Long totalRecords = callDetailRecordRepository.findCountAllForAverage(
+                callsDetailsRequest.getAccounts(),
+                callsDetailsRequest.getDestinations(),
+                callsDetailsRequest.getStatuses(),
+                callsDetailsRequest.getStartDatetime(),
+                callsDetailsRequest.getEndDatetime(),
+                callsDetailsRequest.getCallDurationInSeconds()
+        );
+        final Long page = callsDetailsRequest.getPage();
+        PageRequest pageRequest = PageRequest.of(page.intValue() - 1, callsDetailsRequest.getResultsPerPage().intValue());
+        final long totalPages = totalRecords / callsDetailsRequest.getResultsPerPage() + (totalRecords % callsDetailsRequest.getResultsPerPage() == 0 ? 0 : 1);
+        final List<CallDetailRecord> records = callDetailRecordRepository.findAllWithParams(
+                callsDetailsRequest.getAccounts(),
+                callsDetailsRequest.getDestinations(),
+                callsDetailsRequest.getStatuses(),
+                callsDetailsRequest.getStartDatetime(),
+                callsDetailsRequest.getEndDatetime(),
+                callsDetailsRequest.getCallDurationInSeconds(),
+                pageRequest
+        );
+        return new CallsDetailsDTO(page, callsDetailsRequest.getResultsPerPage(), totalPages, totalRecords, records);
+    }
+
+    @Transactional
+    public Optional<CallDetailRecord> findByUUID(UUID uuid) {
+        return callDetailRecordRepository.findById(uuid);
+    }
+
 
 }

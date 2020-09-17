@@ -2,15 +2,16 @@ package com.craftsoft.test.cdr.core.controller;
 
 import com.craftsoft.test.cdr.core.dto.AverageCallsDetailsInfo;
 import com.craftsoft.test.cdr.core.dto.CallsDetailsDTO;
+import com.craftsoft.test.cdr.core.entity.CallDetailRecord;
 import com.craftsoft.test.cdr.core.payload.AverageCallsDetailsRequest;
 import com.craftsoft.test.cdr.core.payload.CallsDetailsRequest;
-import com.craftsoft.test.cdr.core.service.CallDetailRecordStatisticsService;
+import com.craftsoft.test.cdr.core.service.CallDetailRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 /**
  * Controller to upload file and insert new call detail records
@@ -22,20 +23,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CallDetailRecordsStatisticsController {
 
-    private final CallDetailRecordStatisticsService callDetailRecordStatisticsService;
+    private final CallDetailRecordService callDetailRecordService;
 
-    public CallDetailRecordsStatisticsController(CallDetailRecordStatisticsService callDetailRecordStatisticsService) {
-        this.callDetailRecordStatisticsService = callDetailRecordStatisticsService;
+    public CallDetailRecordsStatisticsController(CallDetailRecordService callDetailRecordService) {
+        this.callDetailRecordService = callDetailRecordService;
     }
 
     @PostMapping("/average-info")
     public ResponseEntity<AverageCallsDetailsInfo> getAverage(@Validated @RequestBody AverageCallsDetailsRequest averageCallsDetailsRequest) {
-        return ResponseEntity.ok(callDetailRecordStatisticsService.getAverage(averageCallsDetailsRequest));
+        return ResponseEntity.ok(callDetailRecordService.getAverage(averageCallsDetailsRequest));
     }
 
-    @PostMapping("/list-calls")
-    public ResponseEntity<CallsDetailsDTO> getAverage(@Validated @RequestBody CallsDetailsRequest callsDetailsRequest) {
-        return ResponseEntity.ok(callDetailRecordStatisticsService.getAllCallDetailRecords(callsDetailsRequest));
+    @PostMapping("/filter-calls")
+    public ResponseEntity<CallsDetailsDTO> filterCalls(@Validated @RequestBody CallsDetailsRequest callsDetailsRequest) {
+        return ResponseEntity.ok(callDetailRecordService.getAllCallDetailRecords(callsDetailsRequest));
+    }
+
+    @GetMapping("/call/{uuid}")
+    public ResponseEntity<CallDetailRecord> getCall(@PathVariable(value = "uuid") String uuid) {
+        return ResponseEntity.of(callDetailRecordService.findByUUID(UUID.fromString(uuid)));
     }
 
 }
