@@ -21,20 +21,20 @@ import java.util.UUID;
  */
 @Slf4j
 @RestController
-public class CallDetailRecordsStatisticsController {
+public class CallDetailRecordsController {
 
     private final CallDetailRecordService callDetailRecordService;
 
-    public CallDetailRecordsStatisticsController(CallDetailRecordService callDetailRecordService) {
+    public CallDetailRecordsController(CallDetailRecordService callDetailRecordService) {
         this.callDetailRecordService = callDetailRecordService;
     }
 
-    @PostMapping("/average-info")
+    @PostMapping("/calls/average")
     public ResponseEntity<AverageCallsDetailsInfo> getAverage(@Validated @RequestBody AverageCallsDetailsRequest averageCallsDetailsRequest) {
         return ResponseEntity.ok(callDetailRecordService.getAverage(averageCallsDetailsRequest));
     }
 
-    @PostMapping("/filter-calls")
+    @PostMapping("/calls")
     public ResponseEntity<CallsDetailsDTO> filterCalls(@Validated @RequestBody CallsDetailsRequest callsDetailsRequest) {
         return ResponseEntity.ok(callDetailRecordService.getAllCallDetailRecords(callsDetailsRequest));
     }
