@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
+ * Controller to upload file and insert new call detail records
+ *
  * @author Andrew Ruban
  * @since 17.09.2020
  */
