@@ -20,6 +20,8 @@ public class AverageCallsDetailsInfo {
 
     private BigDecimal averageCallCost;
 
+    private BigDecimal averageCallsNumber;
+
     private BigDecimal averageCostPerMinute;
 
     private BigDecimal averageDuration;
