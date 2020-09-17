@@ -94,7 +94,8 @@ public class CallDetailRecordService {
                 averageCallsDetailsRequest.getStatuses(),
                 averageCallsDetailsRequest.getStartDatetime(),
                 averageCallsDetailsRequest.getEndDatetime(),
-                null,
+                averageCallsDetailsRequest.getMinCallDurationInSeconds(),
+                averageCallsDetailsRequest.getMaxCallDurationInSeconds(),
                 Pageable.unpaged()
         );
 
@@ -115,7 +116,8 @@ public class CallDetailRecordService {
                 callsDetailsRequest.getStatuses(),
                 callsDetailsRequest.getStartDatetime(),
                 callsDetailsRequest.getEndDatetime(),
-                callsDetailsRequest.getCallDurationInSeconds()
+                callsDetailsRequest.getMinCallDurationInSeconds(),
+                callsDetailsRequest.getMaxCallDurationInSeconds()
         );
         final Long page = callsDetailsRequest.getPage();
         PageRequest pageRequest = PageRequest.of(
@@ -129,7 +131,8 @@ public class CallDetailRecordService {
                 callsDetailsRequest.getStatuses(),
                 callsDetailsRequest.getStartDatetime(),
                 callsDetailsRequest.getEndDatetime(),
-                callsDetailsRequest.getCallDurationInSeconds(),
+                callsDetailsRequest.getMinCallDurationInSeconds(),
+                callsDetailsRequest.getMaxCallDurationInSeconds(),
                 pageRequest
         );
         return new CallsDetailsDTO(page, callsDetailsRequest.getResultsPerPage(), totalPages, totalRecords, records);
@@ -160,7 +163,8 @@ public class CallDetailRecordService {
                 callsDetailsRequest.getStatuses(),
                 callsDetailsRequest.getStartDatetime(),
                 callsDetailsRequest.getEndDatetime(),
-                callsDetailsRequest.getCallDurationInSeconds());
+                callsDetailsRequest.getMinCallDurationInSeconds(),
+                callsDetailsRequest.getMaxCallDurationInSeconds());
     }
 
     /**
@@ -177,6 +181,7 @@ public class CallDetailRecordService {
                 callsDetailsRequest.getStatuses(),
                 callsDetailsRequest.getStartDatetime(),
                 callsDetailsRequest.getEndDatetime(),
-                callsDetailsRequest.getCallDurationInSeconds());
+                callsDetailsRequest.getMinCallDurationInSeconds(),
+                callsDetailsRequest.getMaxCallDurationInSeconds());
     }
 }

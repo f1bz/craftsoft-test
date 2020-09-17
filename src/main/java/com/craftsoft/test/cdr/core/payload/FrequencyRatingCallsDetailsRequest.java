@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -27,5 +28,9 @@ public class FrequencyRatingCallsDetailsRequest {
     private List<String> statuses;
 
     @Min(0)
-    private Integer callDurationInSeconds;
+    private BigDecimal minCallDurationInSeconds;
+
+    @Min(1)
+    private BigDecimal maxCallDurationInSeconds;
+
 }

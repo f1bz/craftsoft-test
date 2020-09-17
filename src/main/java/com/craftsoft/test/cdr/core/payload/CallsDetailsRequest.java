@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,10 @@ public class CallsDetailsRequest {
     private Sort.Direction sortDirection = Sort.Direction.ASC;
 
     @Min(0)
-    private Integer callDurationInSeconds;
+    private BigDecimal minCallDurationInSeconds;
+
+    @Min(1)
+    private BigDecimal maxCallDurationInSeconds;
 
     @NotNull
     @Min(1)

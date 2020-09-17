@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -28,8 +29,9 @@ public interface CallDetailRecordRepository extends PagingAndSortingRepository<C
             " and (coalesce(:statuses) is null or cdr.status in :statuses) " +
             " and (coalesce(:startDatetime) is null or cdr.startDatetime >= :startDatetime)" +
             " and (coalesce(:endDatetime) is null or cdr.endDatetime <= :endDatetime)" +
-            " and (coalesce(:duration) is null or extract(epoch from (cdr.endDatetime - cdr.startDatetime)) <= :duration)")
-    List<CallDetailRecord> findAllWithParams(List<String> accounts, List<String> destinations, List<String> statuses, Date startDatetime, Date endDatetime, Integer duration, Pageable page);
+            " and (coalesce(:maxDuration) is null or cdr.totalDuration <= :maxDuration)" +
+            " and (coalesce(:minDuration) is null or cdr.totalDuration >= :minDuration)")
+    List<CallDetailRecord> findAllWithParams(List<String> accounts, List<String> destinations, List<String> statuses, Date startDatetime, Date endDatetime, BigDecimal minDuration, BigDecimal maxDuration, Pageable page);
 
     @Query("select count(cdr) From CallDetailRecord cdr where" +
             " (coalesce(:accounts) is null or cdr.account in :accounts) " +
@@ -37,8 +39,9 @@ public interface CallDetailRecordRepository extends PagingAndSortingRepository<C
             " and (coalesce(:statuses) is null or cdr.status in :statuses) " +
             " and (coalesce(:startDatetime) is null or cdr.startDatetime >= :startDatetime)" +
             " and (coalesce(:endDatetime) is null or cdr.endDatetime <= :endDatetime)" +
-            "and (coalesce(:duration) is null or extract(epoch from (cdr.endDatetime - cdr.startDatetime)) <= :duration)")
-    Long findCountAllForAverage(List<String> accounts, List<String> destinations, List<String> statuses, Date startDatetime, Date endDatetime, Integer duration);
+            " and (coalesce(:maxDuration) is null or cdr.totalDuration <= :maxDuration)" +
+            " and (coalesce(:minDuration) is null or cdr.totalDuration >= :minDuration)")
+    Long findCountAllForAverage(List<String> accounts, List<String> destinations, List<String> statuses, Date startDatetime, Date endDatetime, BigDecimal minDuration, BigDecimal maxDuration);
 
     @Query("select  new com.craftsoft.test.cdr.core.entity.RatingFrequencyRecord(cdr.account, count(cdr)) From CallDetailRecord cdr where " +
             " (coalesce(:accounts) is null or cdr.account in :accounts) " +
@@ -46,9 +49,10 @@ public interface CallDetailRecordRepository extends PagingAndSortingRepository<C
             " and (coalesce(:statuses) is null or cdr.status in :statuses) " +
             " and (coalesce(:startDatetime) is null or cdr.startDatetime >= :startDatetime)" +
             " and (coalesce(:endDatetime) is null or cdr.endDatetime <= :endDatetime)" +
-            "and (coalesce(:duration) is null or extract(epoch from (cdr.endDatetime - cdr.startDatetime)) <= :duration)" +
+            " and (coalesce(:maxDuration) is null or cdr.totalDuration <= :maxDuration)" +
+            " and (coalesce(:minDuration) is null or cdr.totalDuration >= :minDuration)" +
             " group by cdr.account order by count(cdr) desc")
-    List<RatingFrequencyRecord> findAccountRatingFrequency(List<String> accounts, List<String> destinations, List<String> statuses, Date startDatetime, Date endDatetime, Integer duration);
+    List<RatingFrequencyRecord> findAccountRatingFrequency(List<String> accounts, List<String> destinations, List<String> statuses, Date startDatetime, Date endDatetime, BigDecimal minDuration, BigDecimal maxDuration);
 
 
     @Query("select new com.craftsoft.test.cdr.core.entity.RatingFrequencyRecord(cdr.destination, count(cdr)) From CallDetailRecord cdr where " +
@@ -57,8 +61,9 @@ public interface CallDetailRecordRepository extends PagingAndSortingRepository<C
             " and (coalesce(:statuses) is null or cdr.status in :statuses) " +
             " and (coalesce(:startDatetime) is null or cdr.startDatetime >= :startDatetime)" +
             " and (coalesce(:endDatetime) is null or cdr.endDatetime <= :endDatetime)" +
-            "and (coalesce(:duration) is null or extract(epoch from (cdr.endDatetime - cdr.startDatetime)) <= :duration)" +
+            " and (coalesce(:maxDuration) is null or cdr.totalDuration <= :maxDuration)" +
+            " and (coalesce(:minDuration) is null or cdr.totalDuration >= :minDuration)" +
             " group by cdr.destination order by count(cdr) desc")
-    List<RatingFrequencyRecord> findDestinationRatingFrequency(List<String> accounts, List<String> destinations, List<String> statuses, Date startDatetime, Date endDatetime, Integer duration);
+    List<RatingFrequencyRecord> findDestinationRatingFrequency(List<String> accounts, List<String> destinations, List<String> statuses, Date startDatetime, Date endDatetime, BigDecimal minDuration, BigDecimal maxDuration);
 
 }
