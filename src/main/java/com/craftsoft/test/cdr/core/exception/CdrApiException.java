@@ -1,6 +1,7 @@
 package com.craftsoft.test.cdr.core.exception;
 
-/**
+/** Exception wrapper for all handled exceptions
+ *
  * @author Andrew Ruban
  * @since 17.09.2020
  */

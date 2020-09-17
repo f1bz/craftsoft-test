@@ -25,8 +25,8 @@ public class UploadController {
 
     @SneakyThrows
     @PostMapping("/upload")
-    public ResponseEntity uploadFile(@RequestParam("file") MultipartFile file) {
-        callDetailRecordService.storeNewRecords(file);
+    public ResponseEntity<Void> uploadFile(@RequestParam(value = "file",required = false) MultipartFile file) {
+        callDetailRecordService.insertNewRecords(file);
         return ResponseEntity.accepted()
                 .build();
     }
