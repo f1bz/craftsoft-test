@@ -28,7 +28,7 @@ public class CallDetailRecordValidator {
         if (callDetailRecord.getAccount().equals(callDetailRecord.getDestination())) {
             throw new CdrApiException(String.format("Error with record %s - account is same as destination!", callDetailRecord.getId().toString()));
         }
-        if (callDetailRecord.getCostPerminute().doubleValue() < 0) {
+        if (callDetailRecord.getCostPerMinute().doubleValue() < 0) {
             throw new CdrApiException(String.format("Error with record %s - cost per minute cannot be negative!", callDetailRecord.getId().toString()));
         }
     }

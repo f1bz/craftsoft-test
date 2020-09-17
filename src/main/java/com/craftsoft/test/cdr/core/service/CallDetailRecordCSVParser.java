@@ -84,7 +84,7 @@ public class CallDetailRecordCSVParser {
         callDetailRecord.setStartDatetime(startDatetime);
         callDetailRecord.setEndDatetime(endDatetime);
         callDetailRecord.setStatus(status);
-        callDetailRecord.setCostPerminute(costPerMinute);
+        callDetailRecord.setCostPerMinute(costPerMinute);
         return callDetailRecord;
     }
 

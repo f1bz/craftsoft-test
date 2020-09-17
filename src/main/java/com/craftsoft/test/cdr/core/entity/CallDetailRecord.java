@@ -41,7 +41,7 @@ public class CallDetailRecord {
 
     private String status;
 
-    private BigDecimal costPerminute;
+    private BigDecimal costPerMinute;
 
 
 }
