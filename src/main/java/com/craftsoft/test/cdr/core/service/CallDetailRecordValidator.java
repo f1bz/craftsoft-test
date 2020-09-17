@@ -26,7 +26,7 @@ public class CallDetailRecordValidator {
      * @param cdr the call detail record
      */
     public void validateRecord(CallDetailRecord cdr) {
-        if (cdr.getStartDatetime().isAfter(cdr.getEndDatetime())) {
+        if (cdr.getStartDatetime().toInstant().isAfter(cdr.getEndDatetime().toInstant())) {
             throw new CdrApiException(String.format("Error with record %s - start date is after end date!", cdr.getId().toString()));
         }
         if (cdr.getAccount().equals(cdr.getDestination())) {

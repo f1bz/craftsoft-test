@@ -1,5 +1,7 @@
 package com.craftsoft.test.cdr.core.entity;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -9,19 +11,22 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.Duration;
+import java.util.Date;
 import java.util.UUID;
 
 /**
+ * The type Call detail record.
+ *
  * @author Andrew Ruban
  * @since 17.09.2020
  */
-
 @Table(name = "call_detail_records")
 @Entity(name = "CallDetailRecord")
 @Data
 @ToString
 @NoArgsConstructor
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class CallDetailRecord {
 
     @Id
@@ -39,11 +44,11 @@ public class CallDetailRecord {
 
     @NotNull
     @Column(name = "start_datetime")
-    private Instant startDatetime;
+    private Date startDatetime;
 
     @NotNull
     @Column(name = "end_datetime")
-    private Instant endDatetime;
+    private Date endDatetime;
 
     @Length(max = 20)
     @NotNull
@@ -54,4 +59,40 @@ public class CallDetailRecord {
     @Column(name = "cost_per_minute")
     private BigDecimal costPerMinute;
 
+    @Transient
+    private BigDecimal totalCallCost;
+
+    @Transient
+    private BigDecimal totalCallDuration;
+
+    @PostLoad
+    private void postLoad() {
+        recalculateTotalCostAndDuration();
+    }
+
+    /**
+     * Recalculates total cost and duration when changing start or end datetime or cost per minute.
+     */
+    private void recalculateTotalCostAndDuration() {
+        long duration = Duration.between(getStartDatetime().toInstant(), getEndDatetime().toInstant()).toMillis();
+        long seconds = duration / 1000;
+        BigDecimal milliseconds = BigDecimal.valueOf((duration - (seconds * 1000)) / 1000d);
+        totalCallDuration = BigDecimal.valueOf(seconds).add(milliseconds);
+        totalCallCost = costPerMinute.multiply(totalCallDuration);
+    }
+
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
+        recalculateTotalCostAndDuration();
+    }
+
+    public void setEndDatetime(Date endDatetime) {
+        this.endDatetime = endDatetime;
+        recalculateTotalCostAndDuration();
+    }
+
+    public void setCostPerMinute(BigDecimal costPerMinute) {
+        this.costPerMinute = costPerMinute;
+        recalculateTotalCostAndDuration();
+    }
 }

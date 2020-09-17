@@ -73,8 +73,8 @@ public class CallDetailRecordCSVParser {
         String id = record.get(CSV_HEADERS.ID).trim();
         String account = record.get(CSV_HEADERS.ACCOUNT).trim();
         String destination = record.get(CSV_HEADERS.DESTINATION).trim();
-        Instant startDatetime = new Date(Long.parseLong(record.get(CSV_HEADERS.STARTDATE))).toInstant();
-        Instant endDatetime = new Date(Long.parseLong(record.get(CSV_HEADERS.ENDDATE))).toInstant();
+        Date startDatetime = new Date(Long.parseLong(record.get(CSV_HEADERS.STARTDATE)));
+        Date endDatetime = new Date(Long.parseLong(record.get(CSV_HEADERS.ENDDATE)));
         String status = record.get(CSV_HEADERS.STATUS);
         BigDecimal costPerMinute = new BigDecimal(record.get(CSV_HEADERS.COSTPERMINUTE));
         CallDetailRecord callDetailRecord = new CallDetailRecord();
