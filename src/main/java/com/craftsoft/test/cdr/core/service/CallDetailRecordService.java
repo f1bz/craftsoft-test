@@ -3,9 +3,11 @@ package com.craftsoft.test.cdr.core.service;
 import com.craftsoft.test.cdr.core.dto.AverageCallsDetailsInfo;
 import com.craftsoft.test.cdr.core.dto.CallsDetailsDTO;
 import com.craftsoft.test.cdr.core.entity.CallDetailRecord;
+import com.craftsoft.test.cdr.core.entity.RatingFrequencyRecord;
 import com.craftsoft.test.cdr.core.exception.CdrApiException;
 import com.craftsoft.test.cdr.core.payload.AverageCallsDetailsRequest;
 import com.craftsoft.test.cdr.core.payload.CallsDetailsRequest;
+import com.craftsoft.test.cdr.core.payload.FrequencyRatingCallsDetailsRequest;
 import com.craftsoft.test.cdr.core.repository.CallDetailRecordRepository;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 public class CallDetailRecordService {
 
     private final CallDetailRecordCSVParser callDetailRecordCSVParser;
+
     private final CallDetailRecordRepository callDetailRecordRepository;
 
     public CallDetailRecordService(CallDetailRecordCSVParser callDetailRecordCSVParser, CallDetailRecordRepository callDetailRecordRepository, CallDetailRecordAverageCalculator callDetailRecordAverageCalculator) {
@@ -77,6 +80,12 @@ public class CallDetailRecordService {
 
     private final CallDetailRecordAverageCalculator callDetailRecordAverageCalculator;
 
+    /**
+     * Gets average info.
+     *
+     * @param averageCallsDetailsRequest the average calls details request
+     * @return the average
+     */
     @Transactional
     public AverageCallsDetailsInfo getAverage(AverageCallsDetailsRequest averageCallsDetailsRequest) {
         final List<CallDetailRecord> allForAverage = callDetailRecordRepository.findAllWithParams(
@@ -92,6 +101,12 @@ public class CallDetailRecordService {
         return callDetailRecordAverageCalculator.calculateAverage(allForAverage);
     }
 
+    /**
+     * Gets all call detail records.
+     *
+     * @param callsDetailsRequest the calls details request
+     * @return the all call detail records
+     */
     @Transactional
     public CallsDetailsDTO getAllCallDetailRecords(CallsDetailsRequest callsDetailsRequest) {
         final Long totalRecords = callDetailRecordRepository.findCountAllForAverage(
@@ -120,10 +135,48 @@ public class CallDetailRecordService {
         return new CallsDetailsDTO(page, callsDetailsRequest.getResultsPerPage(), totalPages, totalRecords, records);
     }
 
+    /**
+     * Find by uuid.
+     *
+     * @param uuid the uuid
+     * @return the optional record
+     */
     @Transactional
     public Optional<CallDetailRecord> findByUUID(UUID uuid) {
         return callDetailRecordRepository.findById(uuid);
     }
 
+    /**
+     * Gets top account frequency rating.
+     *
+     * @param callsDetailsRequest the calls details request
+     * @return the top account frequency rating
+     */
+    @Transactional
+    public List<RatingFrequencyRecord> getTopAccountFrequencyRating(FrequencyRatingCallsDetailsRequest callsDetailsRequest) {
+        return callDetailRecordRepository.findAccountRatingFrequency(
+                callsDetailsRequest.getAccounts(),
+                callsDetailsRequest.getDestinations(),
+                callsDetailsRequest.getStatuses(),
+                callsDetailsRequest.getStartDatetime(),
+                callsDetailsRequest.getEndDatetime(),
+                callsDetailsRequest.getCallDurationInSeconds());
+    }
 
+    /**
+     * Gets top destination frequency rating.
+     *
+     * @param callsDetailsRequest the calls details request
+     * @return the top destination frequency rating
+     */
+    @Transactional
+    public List<RatingFrequencyRecord> getTopDestinationFrequencyRating(FrequencyRatingCallsDetailsRequest callsDetailsRequest) {
+        return callDetailRecordRepository.findDestinationRatingFrequency(
+                callsDetailsRequest.getAccounts(),
+                callsDetailsRequest.getDestinations(),
+                callsDetailsRequest.getStatuses(),
+                callsDetailsRequest.getStartDatetime(),
+                callsDetailsRequest.getEndDatetime(),
+                callsDetailsRequest.getCallDurationInSeconds());
+    }
 }

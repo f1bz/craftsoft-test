@@ -3,14 +3,17 @@ package com.craftsoft.test.cdr.core.controller;
 import com.craftsoft.test.cdr.core.dto.AverageCallsDetailsInfo;
 import com.craftsoft.test.cdr.core.dto.CallsDetailsDTO;
 import com.craftsoft.test.cdr.core.entity.CallDetailRecord;
+import com.craftsoft.test.cdr.core.entity.RatingFrequencyRecord;
 import com.craftsoft.test.cdr.core.payload.AverageCallsDetailsRequest;
 import com.craftsoft.test.cdr.core.payload.CallsDetailsRequest;
+import com.craftsoft.test.cdr.core.payload.FrequencyRatingCallsDetailsRequest;
 import com.craftsoft.test.cdr.core.service.CallDetailRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -42,6 +45,16 @@ public class CallDetailRecordsController {
     @GetMapping("/call/{uuid}")
     public ResponseEntity<CallDetailRecord> getCall(@PathVariable(value = "uuid") String uuid) {
         return ResponseEntity.of(callDetailRecordService.findByUUID(UUID.fromString(uuid)));
+    }
+
+    @PostMapping("/calls/account-rating")
+    public ResponseEntity<List<RatingFrequencyRecord>> getTopAccountFrequencyRating(@Validated @RequestBody FrequencyRatingCallsDetailsRequest callsDetailsRequest) {
+        return ResponseEntity.ok(callDetailRecordService.getTopAccountFrequencyRating(callsDetailsRequest));
+    }
+
+    @PostMapping("/calls/destination-rating")
+    public ResponseEntity<List<RatingFrequencyRecord>> getTopDestinationFrequencyRating(@Validated @RequestBody FrequencyRatingCallsDetailsRequest callsDetailsRequest) {
+        return ResponseEntity.ok(callDetailRecordService.getTopDestinationFrequencyRating(callsDetailsRequest));
     }
 
 }
