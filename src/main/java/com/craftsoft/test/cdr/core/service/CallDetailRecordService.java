@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * Service that performs different operations with call details records .
+ * Service that performs insert operation with call details records.
  *
  * @author Andrew Ruban
  * @since 17.09.2020
