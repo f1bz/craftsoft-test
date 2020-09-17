@@ -13,10 +13,5 @@ import lombok.Data;
 @Data
 public class CdrApiExceptionDTO {
 
-    /**
-     * Default API exception dto
-     */
-    public static final CdrApiExceptionDTO DEFAULT_CDR_API_EXCEPTION_DTO = new CdrApiExceptionDTO("Oops, something went wrong! Try again later.");
-
     private final String description;
 }

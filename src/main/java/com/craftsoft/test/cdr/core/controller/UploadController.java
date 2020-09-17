@@ -15,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Andrew Ruban
  * @since 17.09.2020
  */
-@RestController
 @Slf4j
+@RestController
 public class UploadController {
 
     private final CallDetailRecordService callDetailRecordService;
@@ -27,7 +27,7 @@ public class UploadController {
 
     @SneakyThrows
     @PostMapping("/upload")
-    public ResponseEntity<Void> uploadFile(@RequestParam(value = "file",required = false) MultipartFile file) {
+    public ResponseEntity<Void> uploadFile(@RequestParam(value = "file", required = false) MultipartFile file) {
         callDetailRecordService.insertNewRecords(file);
         return ResponseEntity.accepted()
                 .build();

@@ -1,7 +1,6 @@
 package com.craftsoft.test.cdr.core.controller;
 
 import com.craftsoft.test.cdr.core.dto.CdrApiExceptionDTO;
-import com.craftsoft.test.cdr.core.exception.CdrApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,28 +18,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ControllerExceptionHandler {
 
     /**
-     * Handle CdrApiException.
+     * Handle occurred exception.
      *
-     * @param e the CdrApiException
-     * @return the response entity
-     */
-    @ExceptionHandler(CdrApiException.class)
-    public ResponseEntity<CdrApiExceptionDTO> handleApiException(CdrApiException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new CdrApiExceptionDTO(e.getMessage()));
-    }
-
-    /**
-     * Handle other exceptions.
-     *
-     * @param e the other Exception
-     * @return the response entity with default API exception dto
+     * @param e the e
+     * @return the response entity with error description
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<CdrApiExceptionDTO> handleOtherException(Exception e) {
-        log.error("{}:{}", e.getMessage(), e);
+    public ResponseEntity<CdrApiExceptionDTO> handleException(Exception e) {
+        log.error("{}:{}\n", e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(CdrApiExceptionDTO.DEFAULT_CDR_API_EXCEPTION_DTO);
+                .body(new CdrApiExceptionDTO(e.getMessage()));
     }
 
 }
