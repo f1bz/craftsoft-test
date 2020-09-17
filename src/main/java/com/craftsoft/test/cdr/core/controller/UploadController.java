@@ -1,6 +1,7 @@
 package com.craftsoft.test.cdr.core.controller;
 
 import com.craftsoft.test.cdr.core.service.CallDetailRecordService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class UploadController {
         this.callDetailRecordService = callDetailRecordService;
     }
 
+    @Operation(summary = "Upload file in csv format", description = "Upload files containing call details records in csv format")
     @SneakyThrows
     @PostMapping("/upload")
     public ResponseEntity<Void> uploadFile(@RequestParam(value = "file", required = false) MultipartFile file) {
