@@ -37,4 +37,4 @@ Spring DATA JPA was used as it is much easier and faster to develop the applicat
 4. Redo calculating average metrics to be calculated on database level
 
 ---
-Visit deployed application at http://144.91.73.200:8080/swagger-ui
+Visit deployed application at http://144.91.73.200:8080/swagger-ui.html
