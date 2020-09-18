@@ -1,6 +1,6 @@
-#Test project for Craftsoft from Andrew Ruban
+# Test project for Craftsoft from Andrew Ruban
 
-###Technologies used:
+### Technologies used:
 1. Spring Boot 2.3.3 
 2. Spring DATA JPA 2.3.3
 3. PostgreSQL 11.0
@@ -12,7 +12,7 @@ Generally speaking, it is much more flexible than other SQL databases in terms o
 
 Spring DATA JPA was used as it is much easier and faster to develop the application with all auto-configured stuff and easy-to-use repositories.
 
-###To run and test the API, follow this instruction:
+### To run and test the API, follow this instruction:
 1. Install docker and docker compose 
 2. Run command ```sudo docker-compose -f setup/docker-postgres.yml up -d```
 3. Connect to database and execute ```setup/schema.sql```
@@ -26,11 +26,11 @@ Spring DATA JPA was used as it is much easier and faster to develop the applicat
 11. Try out other endpoints listed in Swagger
 
 
-###Made assumptions
+### Made assumptions
 1. At some points it might be better to use Spring jdbc template that provides more flexibility when executing SQL requests, however it adds some complexity and slow down development process
 
 
-##Any other considerations/future enhancements
+## Any other considerations/future enhancements
 1. Add some checking mechanism for not allowing parallel phone calls from one account at same time
 2. Add more filtering parameters like min\max of cost, etc.
 3. Add account\destination validating by pattern 
