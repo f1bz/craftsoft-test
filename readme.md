@@ -28,7 +28,7 @@ Spring DATA JPA was used as it is much easier and faster to develop the applicat
 
 ### Made assumptions
 1. At some points it might be better to use Spring jdbc template that provides more flexibility when executing SQL requests, however it adds some complexity and slow down development process
-
+2. API contains endpoints with different filters that cover all needed operations and provides an easy possibility to fetch data
 
 ## Any other considerations/future enhancements
 1. Add some checking mechanism for not allowing parallel phone calls from one account at same time
